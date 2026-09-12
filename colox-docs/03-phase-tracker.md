@@ -13,7 +13,7 @@
 
 Planned breakdown (will be delivered in small sub-steps):
 
-- [ ] Database schema: users, drivers, rides, complaints, sos_incidents (PostgreSQL + PostGIS)
+- [x] Database schema: users (with account_status + complaints_against_count), user_roles, driver_profiles, rides, complaints, sos_incidents, account_holds — all migrations run successfully on PostgreSQL + PostGIS. PostGIS geometry columns, SOS field encryption, and sos_access_logs deferred to dedicated later steps.
 - [ ] Auth: registration/login with role rules (rider-only vs driver, dual-role toggle), one-NID-one-account enforcement
 - [ ] Verification flow: NID + license upload → admin manual approval
 - [ ] Pickup/dropoff selection + map integration (MapLibre/flutter_map + OSRM routing)

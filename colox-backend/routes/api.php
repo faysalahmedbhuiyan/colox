@@ -10,3 +10,6 @@ Route::get('/health', function () {
         'timestamp' => now()->toIso8601String(),
     ]);
 });
+use App\Http\Controllers\Api\AuthController;
+
+Route::post('/auth/register/rider', [AuthController::class, 'registerRider']);
