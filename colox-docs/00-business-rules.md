@@ -14,6 +14,7 @@ These rules must NEVER be violated in implementation. Any code touching these ar
 - One NID/phone number = max 1 Rider account + 1 Driver account.
 - Must be enforced at database level (unique constraint) AND at registration-time (duplicate check).
 - Not yet implemented (Phase 1 — auth/registration).
+- Implemented via Laravel unique validation on `nid_number` column (plus DB-level unique constraint). Fresh driver signup auto-grants rider role (dual-mode by default); rider-to-driver upgrade path also available via separate authenticated endpoint.
 
 ## 3. Admin Panel Isolation
 
