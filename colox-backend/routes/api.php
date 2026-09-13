@@ -18,3 +18,15 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
 });
+
+Route::middleware(['auth:sanctum', 'role:rider'])->group(function () {
+    Route::get('/rider/ping', function () {
+        return response()->json(['message' => 'Rider access confirmed']);
+    });
+});
+
+Route::middleware(['auth:sanctum', 'role:driver'])->group(function () {
+    Route::get('/driver/ping', function () {
+        return response()->json(['message' => 'Driver access confirmed']);
+    });
+});
