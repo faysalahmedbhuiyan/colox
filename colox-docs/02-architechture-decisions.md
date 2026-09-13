@@ -51,3 +51,11 @@ Format: Decision — Reasoning. Add new entries at the bottom with date.
 **Reasoning:** CRA is deprecated/unmaintained; Vite is faster and the current community standard.
 
 **Date:** Phase 0
+
+### ADR-006: Role middleware doubles as account_status gatekeeper
+
+**Decision:** `EnsureHasRole` middleware checks both role membership AND `account_status === 'active'` on every protected request, not just at login time.
+
+**Reasoning:** A user's account can transition to `held`/`banned` at any time (e.g. after the 10th complaint), but their existing Sanctum token remains technically valid until revoked. Checking status only at login leaves a window where a held/banned user could keep using an already-issued token. Centralizing this check in the same middleware that already gates every protected route closes that gap without extra queries per route.
+
+**Date:** Phase 1
