@@ -14,7 +14,7 @@
 Planned breakdown (will be delivered in small sub-steps):
 
 - [x] Database schema: users (with account_status + complaints_against_count), user_roles, driver_profiles, rides, complaints, sos_incidents, account_holds — all migrations run successfully on PostgreSQL + PostGIS. PostGIS geometry columns, SOS field encryption, and sos_access_logs deferred to dedicated later steps.
-- [ ] Auth: registration/login with role rules (rider-only vs driver, dual-role toggle), one-NID-one-account enforcement
+- [x] Auth Step 2a: Sanctum installed, User/UserRole/DriverProfile models created, rider registration endpoint (`POST /api/auth/register/rider`) working — token issued on registration. Duplicate NID/phone check and login still pending.
 - [ ] Verification flow: NID + license upload → admin manual approval
 - [ ] Pickup/dropoff selection + map integration (MapLibre/flutter_map + OSRM routing)
 - [ ] Basic trip lifecycle (request → accept/decline → in-progress → complete)

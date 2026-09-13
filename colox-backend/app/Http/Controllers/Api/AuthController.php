@@ -51,4 +51,62 @@ class AuthController extends Controller
             'token' => $token,
         ], 201);
     }
+
+    public function login(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'Invalid credentials',
+            ], 401);
+        }
+
+        if ($user->account_status === 'held') {
+            return response()->json([
+                'message' => 'Your account is currently under review. Please contact support.',
+                'account_status' => 'held',
+            ], 403);
+        }
+
+        if ($user->account_status === 'banned') {
+            return response()->json([
+                'message' => 'Your account has been banned.',
+                'account_status' => 'banned',
+            ], 403);
+        }
+
+        $user->update(['last_login_at' => now()]);
+
+        $token = $user->createToken('colox-app')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Login successful',
+            'user' => $user,
+            'roles' => $user->roles()->pluck('role'),
+            'token' => $token,
+        ]);
+    }
+    
+    public function me(Request $request)
+    {
+        $user = $request->user();
+
+        return response()->json([
+            'user' => $user,
+            'roles' => $user->roles()->pluck('role'),
+        ]);
+    }
 }
