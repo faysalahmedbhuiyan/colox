@@ -30,3 +30,9 @@ Route::middleware(['auth:sanctum', 'role:driver'])->group(function () {
         return response()->json(['message' => 'Driver access confirmed']);
     });
 });
+Route::post('/auth/register/driver', [AuthController::class, 'registerDriver']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/auth/me', [AuthController::class, 'me']);
+    Route::post('/driver/upgrade', [AuthController::class, 'upgradeToDriver']);
+});
