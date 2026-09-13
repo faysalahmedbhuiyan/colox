@@ -33,6 +33,8 @@ These rules must NEVER be violated in implementation. Any code touching these ar
 
 Must be stored in DB (not hardcoded) so admin can edit. Not yet implemented (Phase 1).
 
+- Implemented as `service_fee_slabs` table (min_fare, max_fare, fee) — seeded with initial values matching the slab table above, editable via future admin panel UI (not hardcoded in code).
+
 ## 5. Complaint System
 
 - Every complaint gets an automatic unique Complaint ID.

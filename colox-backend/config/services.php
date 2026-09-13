@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'osrm' => [
+    'base_url' => env('OSRM_BASE_URL', 'http://localhost:5000'),
+    ],
+
 ];

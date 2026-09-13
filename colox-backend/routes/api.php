@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\DriverVerificationController;
+use App\Http\Controllers\Api\RideController;
 
 Route::get('/health', function () {
     return response()->json([
@@ -19,6 +20,8 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/driver/documents', [AuthController::class, 'uploadDriverDocuments']);
+    Route::post('/rides/estimate-fare', [RideController::class, 'estimateFare']);
+    
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {

@@ -34,3 +34,5 @@ No free live traffic source exists initially. Plan: build crowd-sourced traffic 
 Support chatbot or any AI feature comes last, in the final phase only, and must use a self-hosted open-source model (no paid API calls). Do not spend time on this early.
 
 > **Security note (pre-production TODO):** Driver documents (NID/license photos) currently use Laravel's `public` disk for simplicity during development. Before production launch, must switch to a private disk with signed/expiring URLs so sensitive documents aren't publicly guessable via direct link.
+
+> **OSRM setup:** Runs via Docker Compose in `colox-osrm/`. Map data (OSM extract + processed routing graph) is gitignored — regenerate locally per `colox-osrm/README.md`. Currently uses `car.lua` profile for both car and motorcycle rides. Verified working (tested Dhaka→Chittagong route, returned correct ~253km distance).
