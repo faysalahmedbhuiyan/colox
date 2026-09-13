@@ -59,3 +59,11 @@ Format: Decision — Reasoning. Add new entries at the bottom with date.
 **Reasoning:** A user's account can transition to `held`/`banned` at any time (e.g. after the 10th complaint), but their existing Sanctum token remains technically valid until revoked. Checking status only at login leaves a window where a held/banned user could keep using an already-issued token. Centralizing this check in the same middleware that already gates every protected route closes that gap without extra queries per route.
 
 **Date:** Phase 1
+
+### ADR-007: Temporary is_admin flag instead of full admin auth
+
+**Decision:** Admin-only routes are protected by a simple `is_admin` boolean on the `users` table + `EnsureIsAdmin` middleware, rather than a complete separate admin authentication system.
+
+**Reasoning:** Building full admin auth (separate login flow, permission granularity, admin-specific session handling per business rule #3) is a substantial piece of work deserving its own focused phase. Gating it behind a simple flag now lets driver verification logic be built and tested end-to-end without blocking on that larger piece. Must be replaced before production launch — tracked as a required follow-up, not a permanent shortcut.
+
+**Date:** Phase 1

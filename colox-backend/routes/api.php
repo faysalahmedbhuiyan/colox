@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Admin\DriverVerificationController;
 
 Route::get('/health', function () {
     return response()->json([
@@ -17,6 +18,13 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
+    Route::post('/driver/documents', [AuthController::class, 'uploadDriverDocuments']);
+});
+
+Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/drivers/pending', [DriverVerificationController::class, 'pending']);
+    Route::post('/drivers/{driverProfile}/approve', [DriverVerificationController::class, 'approve']);
+    Route::post('/drivers/{driverProfile}/reject', [DriverVerificationController::class, 'reject']);
 });
 
 Route::middleware(['auth:sanctum', 'role:rider'])->group(function () {

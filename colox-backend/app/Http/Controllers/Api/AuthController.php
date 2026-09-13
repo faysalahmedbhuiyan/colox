@@ -9,6 +9,7 @@ use App\Models\DriverProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
@@ -213,6 +214,62 @@ class AuthController extends Controller
         return response()->json([
             'user' => $user,
             'roles' => $user->roles()->pluck('role'),
+        ]);
+    }
+
+    /**
+     * Driver নিজের NID/license/profile ছবি আপলোড করবে (registration-এর পরে, verification-এর আগে)
+     */
+    public function uploadDriverDocuments(Request $request)
+    {
+        $user = $request->user();
+
+        if (! $user->hasRole('driver')) {
+            return response()->json(['message' => 'Only driver accounts can upload these documents.'], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'nid_photo' => ['nullable', 'image', 'max:4096'],
+            'license_photo' => ['nullable', 'image', 'max:4096'],
+            'profile_photo' => ['nullable', 'image', 'max:4096'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $profile = $user->driverProfile;
+
+        if (! $profile) {
+            return response()->json(['message' => 'Driver profile not found.'], 404);
+        }
+
+        $updates = [];
+
+        if ($request->hasFile('nid_photo')) {
+            $updates['nid_photo_path'] = $request->file('nid_photo')->store('driver-documents', 'public');
+        }
+
+        if ($request->hasFile('license_photo')) {
+            $updates['license_photo_path'] = $request->file('license_photo')->store('driver-documents', 'public');
+        }
+
+        if ($request->hasFile('profile_photo')) {
+            $updates['profile_photo_path'] = $request->file('profile_photo')->store('driver-documents', 'public');
+        }
+
+        if (empty($updates)) {
+            return response()->json(['message' => 'No files were uploaded.'], 422);
+        }
+
+        $profile->update($updates);
+
+        return response()->json([
+            'message' => 'Documents uploaded successfully. Awaiting admin verification.',
+            'driver_profile' => $profile->fresh(),
         ]);
     }
 }

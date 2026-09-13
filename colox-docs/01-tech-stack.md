@@ -32,3 +32,5 @@ No free live traffic source exists initially. Plan: build crowd-sourced traffic 
 ## AI Features
 
 Support chatbot or any AI feature comes last, in the final phase only, and must use a self-hosted open-source model (no paid API calls). Do not spend time on this early.
+
+> **Security note (pre-production TODO):** Driver documents (NID/license photos) currently use Laravel's `public` disk for simplicity during development. Before production launch, must switch to a private disk with signed/expiring URLs so sensitive documents aren't publicly guessable via direct link.
