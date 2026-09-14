@@ -48,6 +48,9 @@ Must be stored in DB (not hardcoded) so admin can edit. Not yet implemented (Pha
 - Admin panel gets instant real-time alert (WebSocket + sound).
 - The person who triggered SOS sees nearest police station name, number, and map directions instantly — station data seeded starting with Noakhali district.
 - Not yet implemented (Phase 1 — basic version; full version with directions in Phase 3).
+- Implemented: `sos_incidents.rider_snapshot` and `driver_snapshot` use Laravel's `encrypted:array` cast — encrypted at rest using `APP_KEY`, transparently decrypted when read via the model. Verified via raw DB query that the stored value is ciphertext, not plaintext.
+- `sos_access_logs` table records every time an admin views or acknowledges an incident (who, when, IP address) — created automatically on `GET /admin/sos/{id}` and acknowledge action.
+- **CRITICAL production requirement:** `APP_KEY` must be backed up securely and never regenerated after go-live — doing so would make all previously stored SOS data permanently undecryptable.
 
 ## Non-negotiable Reminders
 

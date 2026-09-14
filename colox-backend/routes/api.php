@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\ComplaintController;
 use App\Http\Controllers\Api\Admin\AccountHoldController;
 use App\Http\Controllers\Api\Admin\DriverVerificationController;
 use App\Http\Controllers\Api\Driver\RideController as DriverRideController;
+use App\Http\Controllers\Api\SosController;
+use App\Http\Controllers\Api\Admin\SosController as AdminSosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +46,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // Complaints
     Route::post('/complaints', [ComplaintController::class, 'store']);
     Route::get('/complaints/mine', [ComplaintController::class, 'myComplaints']);
+
+    //sos
+    Route::post('/sos/trigger', [SosController::class, 'trigger']);
 });
 
 
@@ -96,5 +101,8 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::get('/account-holds/{accountHold}', [AccountHoldController::class, 'show']);
     Route::post('/account-holds/{accountHold}/reinstate', [AccountHoldController::class, 'reinstate']);
     Route::post('/account-holds/{accountHold}/ban', [AccountHoldController::class, 'ban']);
+    Route::get('/sos/active', [AdminSosController::class, 'active']);
+    Route::get('/sos/{sosIncident}', [AdminSosController::class, 'show']);
+    Route::post('/sos/{sosIncident}/acknowledge', [AdminSosController::class, 'acknowledge']);
 
 });
