@@ -1,0 +1,45 @@
+{
+  "message": "Login successful",
+  "user": {
+    "id": 1,
+    "name": "Test Rider",
+    "email": "rider1@test.com",
+    "email_verified_at": null,
+    "created_at": "2026-09-12T11:04:42.000000Z",
+    "updated_at": "2026-09-12T11:04:42.000000Z",
+    "phone": "01700000001",
+    "nid_number": null,
+    "account_status": "active",
+    "complaints_against_count": 0,
+    "last_login_at": null,
+    "is_admin": false
+  },
+  "roles": [
+    "rider"
+  ],
+  "token": "4|8Va6DunidoSRkMx3vCiosqBcVVxlRehI3DkRslAF1ad7012d"
+}
+
+
+{
+  "message": "Login successful",
+  "user": {
+    "id": 2,
+    "name": "Test Driver",
+    "email": "driver1@test.com",
+    "email_verified_at": null,
+    "created_at": "2026-09-13T08:20:54.000000Z",
+    "updated_at": "2026-09-13T08:20:54.000000Z",
+    "phone": "01800000001",
+    "nid_number": "1234567890",
+    "account_status": "active",
+    "complaints_against_count": 0,
+    "last_login_at": null,
+    "is_admin": false
+  },
+  "roles": [
+    "driver",
+    "rider"
+  ],
+  "token": "5|oH2UMEqZP9mFJuyNJQOs797H42gnuGoPjdLXuXP87ae6360c"
+}
