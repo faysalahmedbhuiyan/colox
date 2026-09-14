@@ -67,3 +67,11 @@ Format: Decision — Reasoning. Add new entries at the bottom with date.
 **Reasoning:** Building full admin auth (separate login flow, permission granularity, admin-specific session handling per business rule #3) is a substantial piece of work deserving its own focused phase. Gating it behind a simple flag now lets driver verification logic be built and tested end-to-end without blocking on that larger piece. Must be replaced before production launch — tracked as a required follow-up, not a permanent shortcut.
 
 **Date:** Phase 1
+
+### ADR-009: Mass-assignment fillable fields must be kept in sync
+
+**Decision:** `User::$fillable` must include every column that any `->update()` or `::create()` call sets — not just the ones set at registration time.
+
+**Reasoning:** A real bug was caught during testing: `account_status` and `last_login_at` were missing from `$fillable`, so calls like `$user->update(['account_status' => 'held'])` silently did nothing (Laravel's mass-assignment protection drops unlisted fields without an error). This meant the auto-hold mechanism appeared to run (complaint count incremented correctly via `increment()`, which bypasses fillable checks) but never actually held the account. Caught via manual tinker testing before this reached production — a reminder that silent mass-assignment failures are a recurring risk whenever new columns are added to a model after its initial fillable list was written.
+
+**Date:** Phase 1
