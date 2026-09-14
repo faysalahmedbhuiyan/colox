@@ -27,6 +27,7 @@ Planned breakdown (will be delivered in small sub-steps):
 - [ ] Complaint system: auto Complaint ID, last-10 retention with auto-delete cron
 - [ ] SOS basic version: sos_incidents table, live location + party info capture, admin real-time alert
 - [x] SOS Sub-step A: SOS trigger endpoint (active-ride only), encrypted rider/driver info snapshot (verified encrypted at rest), sos_access_logs for audit trail, admin view/acknowledge endpoints. Sub-step B (real-time WebSocket alert via Reverb, nearest police station info) pending.
+- [x] SOS Sub-step B1: police_stations table seeded with DEMO/placeholder Noakhali data (clearly labeled "(DEMO)" — must be replaced with real station data via admin panel before launch), admin CRUD endpoints, nearest-station lookup (Haversine formula) now included in SOS trigger response. Real-time WebSocket alert (Reverb) still pending — Sub-step B2.
 
 ## Phase 2 — Bidding + Wallet + Chat (NOT STARTED)
 

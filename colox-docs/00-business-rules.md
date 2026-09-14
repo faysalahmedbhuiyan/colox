@@ -51,6 +51,7 @@ Must be stored in DB (not hardcoded) so admin can edit. Not yet implemented (Pha
 - Implemented: `sos_incidents.rider_snapshot` and `driver_snapshot` use Laravel's `encrypted:array` cast — encrypted at rest using `APP_KEY`, transparently decrypted when read via the model. Verified via raw DB query that the stored value is ciphertext, not plaintext.
 - `sos_access_logs` table records every time an admin views or acknowledges an incident (who, when, IP address) — created automatically on `GET /admin/sos/{id}` and acknowledge action.
 - **CRITICAL production requirement:** `APP_KEY` must be backed up securely and never regenerated after go-live — doing so would make all previously stored SOS data permanently undecryptable.
+- **PRE-LAUNCH TODO:** Police station data currently seeded with placeholder/demo entries (named with "(DEMO)" suffix for visibility). Must be replaced with verified real station names/phones/coordinates via admin panel CRUD before production launch.
 
 ## Non-negotiable Reminders
 
