@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\PoliceStation;
 use App\Models\Ride;
 use App\Models\SosIncident;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class SosController extends Controller
@@ -69,12 +71,46 @@ class SosController extends Controller
             'status' => 'active',
         ]);
 
+        $nearestStation = $this->findNearestPoliceStation($request->lat, $request->lng);
+
         // TODO (পরের sub-step): এখানে admin panel-এ real-time WebSocket alert পাঠানো হবে (Reverb দিয়ে)
-        // TODO (পরের sub-step): এখানে নিকটতম থানার তথ্য response-এ যোগ হবে
 
         return response()->json([
             'message' => 'SOS triggered. Help is being alerted.',
             'incident_code' => $incident->incident_code,
+            'nearest_police_station' => $nearestStation,
         ], 201);
+    }
+
+    /**
+     * Haversine formula দিয়ে সবচেয়ে কাছের active থানা খুঁজে বের করে।
+     * থানার সংখ্যা কম (কয়েকশোর মধ্যে) থাকবে বলে raw SQL distance calculation যথেষ্ট দ্রুত —
+     * PostGIS spatial index এখনই দরকার নেই।
+     */
+    private function findNearestPoliceStation(float $lat, float $lng): ?array
+    {
+        $station = DB::table('police_stations')
+            ->select('id', 'name', 'phone', 'area', 'lat', 'lng', DB::raw("
+                (6371 * acos(
+                    cos(radians(?)) * cos(radians(lat)) *
+                    cos(radians(lng) - radians(?)) +
+                    sin(radians(?)) * sin(radians(lat))
+                )) AS distance_km
+            "))
+            ->addBinding([$lat, $lng, $lat], 'select')
+            ->where('is_active', true)
+            ->orderBy('distance_km')
+            ->first();
+
+        if (! $station) {
+            return null;
+        }
+
+        return [
+            'name' => $station->name,
+            'phone' => $station->phone,
+            'area' => $station->area,
+            'distance_km' => round($station->distance_km, 2),
+        ];
     }
 }

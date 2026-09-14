@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\Admin\DriverVerificationController;
 use App\Http\Controllers\Api\Driver\RideController as DriverRideController;
 use App\Http\Controllers\Api\SosController;
 use App\Http\Controllers\Api\Admin\SosController as AdminSosController;
+use App\Http\Controllers\Api\Admin\PoliceStationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,5 +105,6 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::get('/sos/active', [AdminSosController::class, 'active']);
     Route::get('/sos/{sosIncident}', [AdminSosController::class, 'show']);
     Route::post('/sos/{sosIncident}/acknowledge', [AdminSosController::class, 'acknowledge']);
-
+    Route::apiResource('police-stations', PoliceStationController::class)->except(['show']);
+    
 });
