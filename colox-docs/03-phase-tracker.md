@@ -28,6 +28,8 @@ Planned breakdown (will be delivered in small sub-steps):
 - [ ] SOS basic version: sos_incidents table, live location + party info capture, admin real-time alert
 - [x] SOS Sub-step A: SOS trigger endpoint (active-ride only), encrypted rider/driver info snapshot (verified encrypted at rest), sos_access_logs for audit trail, admin view/acknowledge endpoints. Sub-step B (real-time WebSocket alert via Reverb, nearest police station info) pending.
 - [x] SOS Sub-step B1: police_stations table seeded with DEMO/placeholder Noakhali data (clearly labeled "(DEMO)" — must be replaced with real station data via admin panel before launch), admin CRUD endpoints, nearest-station lookup (Haversine formula) now included in SOS trigger response. Real-time WebSocket alert (Reverb) still pending — Sub-step B2.
+- [x] SOS Sub-step B2: Laravel Reverb installed and configured, `SosTriggered` broadcasting event (fires on SOS trigger, private `admin.sos-alerts` channel, authorized via is_admin, payload excludes sensitive snapshot data). SOS Basic Version now functionally complete on the backend — frontend (Flutter SOS button + Admin panel WebSocket listener) integration pending.
+- [x] SOS basic version: sos_incidents table, live location + party info capture (encrypted), admin real-time alert (Reverb), nearest police station lookup (demo data, admin-editable)
 
 ## Phase 2 — Bidding + Wallet + Chat (NOT STARTED)
 
@@ -55,3 +57,5 @@ Planned breakdown (will be delivered in small sub-steps):
 ---
 
 _Last updated: Phase 0 completion_
+
+- [x] Frontend Step F2: Rider home screen with live map (flutter_map), current-location marker via geolocator, graceful permission-denied handling. Android location permissions added to manifest. NOTE: using public OSM tile server for now (dev-only, rate-limited) — must migrate to self-hosted OpenFreeMap (per tech stack) before production.

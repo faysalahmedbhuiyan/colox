@@ -9,6 +9,7 @@ use App\Models\SosIncident;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Events\SosTriggered;
 
 class SosController extends Controller
 {
@@ -72,7 +73,7 @@ class SosController extends Controller
         ]);
 
         $nearestStation = $this->findNearestPoliceStation($request->lat, $request->lng);
-
+        event(new SosTriggered($incident));
         // TODO (পরের sub-step): এখানে admin panel-এ real-time WebSocket alert পাঠানো হবে (Reverb দিয়ে)
 
         return response()->json([

@@ -1,48 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/shared/presentation/splash_screen.dart';
+import '../../features/auth/presentation/login_screen.dart';
+import '../../features/auth/presentation/register_screen.dart';
+import '../../features/rider/presentation/rider_home_screen.dart';
 
-/// User role — এটাই পরে auth state থেকে আসবে (Phase 1-এ)
 enum UserRole { guest, rider, driver, driverInRiderMode }
 
-/// Placeholder auth state — Phase 1-এ real auth দিয়ে replace হবে
 class AuthState {
   final UserRole role;
   final bool isLoggedIn;
-
   const AuthState({required this.role, required this.isLoggedIn});
-
   static const guest = AuthState(role: UserRole.guest, isLoggedIn: false);
 }
 
-/// Route guard — এইখানে business rule enforce হবে:
-/// rider-only account কখনো driver route-এ ঢুকতে পারবে না।
-String? roleGuard(AuthState authState, String targetPath) {
-  if (!authState.isLoggedIn && targetPath != '/login') {
-    return '/login';
-  }
-
-  final isDriverRoute = targetPath.startsWith('/driver');
-  final canAccessDriver =
-      authState.role == UserRole.driver ||
-      authState.role == UserRole.driverInRiderMode;
-
-  if (isDriverRoute && !canAccessDriver) {
-    return '/rider/home';
-  }
-
-  return null;
-}
-
 final appRouter = GoRouter(
-  initialLocation: '/login',
+  initialLocation: '/splash',
   routes: [
-    GoRoute(
-      path: '/login',
-      builder: (context, state) => const PlaceholderScreen(title: 'Login'),
-    ),
+    GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
+    GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+    GoRoute(path: '/register', builder: (context, state) => const RegisterScreen()),
     GoRoute(
       path: '/rider/home',
-      builder: (context, state) => const PlaceholderScreen(title: 'Rider Home'),
+      builder: (context, state) => const RiderHomeScreen(),
     ),
     GoRoute(
       path: '/driver/dashboard',
@@ -59,7 +39,7 @@ class PlaceholderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: Center(child: Text('$title — Phase 1-এ real content আসবে')),
+      body: Center(child: Text('$title — পরের ধাপে real content আসবে')),
     );
   }
 }
